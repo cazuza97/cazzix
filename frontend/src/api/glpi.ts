@@ -1,6 +1,6 @@
 import { GlpiTicket, GlpiCategory, GlpiStatus, GlpiTicketLog, CreateTicketPayload } from '@/types/glpi';
 
-const BASE = 'http://localhost:3001/api/glpi';
+const BASE = `${window.location.protocol}//${window.location.hostname}:3001/api/glpi`;
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {

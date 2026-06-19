@@ -1,7 +1,8 @@
 import axios, { AxiosError } from 'axios';
 import { ZabbixHost, ZabbixProblem, ZabbixGroup, DashboardData } from '@/types';
 
-const BASE_URL = 'http://localhost:3001/api';
+// Resolve dinamicamente para o IP do servidor — funciona tanto local quanto remoto
+const BASE_URL = `${window.location.protocol}//${window.location.hostname}:3001/api`;
 
 function extractError(err: unknown): string {
   const axErr = err as AxiosError<{ error?: string }>;
@@ -86,6 +87,10 @@ export async function fetchGroups(zabbixUrl: string, token: string): Promise<Zab
 // ─── Demo data (via backend) ──────────────────────────────────────────────────
 export async function fetchDemoData(): Promise<DashboardData> {
   const { data } = await axios.get(`${BASE_URL}/demo/data`);
+  // Valida que recebemos JSON válido (não HTML do servidor estático)
+  if (!data || typeof data !== 'object' || !Array.isArray(data.hosts)) {
+    throw new Error('Backend indisponível — usando dados locais');
+  }
   return data as DashboardData;
 }
 
