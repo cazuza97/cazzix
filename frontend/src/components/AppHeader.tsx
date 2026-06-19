@@ -1,10 +1,13 @@
 import {
   AppBar, Toolbar, Box, Typography, Chip,
   Button, Select, MenuItem, FormControl, SelectChangeEvent,
-  IconButton, Tooltip,
+  IconButton, Tooltip, Tabs, Tab,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import LogoutIcon from '@mui/icons-material/Logout';
+import DnsIcon from '@mui/icons-material/Dns';
+import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { COLORS } from '@/theme/theme';
 import { ZabbixGroup } from '@/types';
 
@@ -27,6 +30,10 @@ export function AppHeader({
   onRefresh, refreshing, onLogout, lastUpdated,
 }: AppHeaderProps) {
   const handleGroupChange = (e: SelectChangeEvent) => onGroupChange(e.target.value);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const currentTab = location.pathname.startsWith('/chamados') ? 1 : 0;
 
   const origin = zabbixUrl
     ? (() => { try { return new URL(zabbixUrl).host; } catch { return zabbixUrl; } })()
@@ -93,11 +100,37 @@ export function AppHeader({
           />
         )}
 
+        {/* Nav tabs */}
+        <Tabs
+          value={currentTab}
+          onChange={(_, v) => navigate(v === 1 ? '/chamados' : '/')}
+          sx={{
+            ml: 2,
+            minHeight: 40,
+            '& .MuiTabs-indicator': { background: COLORS.accent, height: 2 },
+            '& .MuiTab-root': {
+              fontFamily: "'Space Mono', monospace",
+              fontSize: '0.65rem',
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              minHeight: 40,
+              color: COLORS.muted,
+              py: 0,
+              px: 1.5,
+              gap: 0.5,
+              '&.Mui-selected': { color: COLORS.text },
+            },
+          }}
+        >
+          <Tab icon={<DnsIcon sx={{ fontSize: 14 }} />} iconPosition="start" label="Infraestrutura" />
+          <Tab icon={<ConfirmationNumberOutlinedIcon sx={{ fontSize: 14 }} />} iconPosition="start" label="Chamados" />
+        </Tabs>
+
         {/* Spacer */}
         <Box sx={{ flex: 1 }} />
 
-        {/* Group filter */}
-        {groups.length > 0 && (
+        {/* Group filter — only on infra tab */}
+        {currentTab === 0 && groups.length > 0 && (
           <FormControl size="small" sx={{ minWidth: 160 }}>
             <Select
               value={selectedGroup}

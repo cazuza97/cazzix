@@ -3,6 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { LoginPage } from '@/pages/LoginPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { HostDetailPage } from '@/pages/HostDetailPage';
+import { ChamadosPage } from '@/pages/ChamadosPage';
 
 export default function App() {
   const { auth } = useAuth();
@@ -21,6 +22,10 @@ export default function App() {
       <Route
         path="/host/:hostid/:hostname"
         element={isAuthenticated ? <HostDetailPage /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/chamados"
+        element={isAuthenticated ? <ChamadosPage /> : <Navigate to="/login" replace />}
       />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
