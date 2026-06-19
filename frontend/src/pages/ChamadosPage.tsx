@@ -17,7 +17,7 @@ import { AppHeader } from '@/components/AppHeader';
 import { KpiCard } from '@/components/KpiCard';
 import { COLORS } from '@/theme/theme';
 import {
-  fetchTickets, fetchGlpiStatus, createTicket, updateTicketStatus, fetchCategories,
+  fetchTickets, fetchGlpiStatus, createTicket, fetchCategories,
 } from '@/api/glpi';
 import { GlpiTicket, GlpiCategory, GLPI_STATUS, GLPI_PRIORITY, CreateTicketPayload } from '@/types/glpi';
 
@@ -351,6 +351,7 @@ export function ChamadosPage() {
               value={loading ? '—' : String(total)}
               icon={<ConfirmationNumberOutlinedIcon />}
               color={COLORS.accent2}
+              sub="chamados registrados"
             />
             <KpiCard
               label="Novos"
